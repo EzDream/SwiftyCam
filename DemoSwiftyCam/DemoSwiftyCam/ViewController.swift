@@ -24,6 +24,7 @@ class ViewController: SwiftyCamViewController, SwiftyCamViewControllerDelegate {
     @IBOutlet weak var flashButton      : UIButton!
     
 	override func viewDidLoad() {
+        videoGravity = .resizeAspect
 		super.viewDidLoad()
         shouldPrompToAppSettings = true
 		cameraDelegate = self
@@ -36,7 +37,10 @@ class ViewController: SwiftyCamViewController, SwiftyCamViewControllerDelegate {
         captureButton.buttonEnabled = false
 	}
 
-	override var prefersStatusBarHidden: Bool {
+    @IBAction func TESTAction(_ sender: Any) {
+        UISelectionFeedbackGenerator().selectionChanged()
+    }
+    override var prefersStatusBarHidden: Bool {
 		return true
 	}
 
@@ -44,6 +48,11 @@ class ViewController: SwiftyCamViewController, SwiftyCamViewControllerDelegate {
 		super.viewDidAppear(animated)
         captureButton.delegate = self
 	}
+    
+//    override func buttonWasTapped() {
+//        super.buttonWasTapped()
+//        UISelectionFeedbackGenerator().selectionChanged()
+//    }
     
     func swiftyCamSessionDidStartRunning(_ swiftyCam: SwiftyCamViewController) {
         print("Session did start running")
@@ -55,10 +64,13 @@ class ViewController: SwiftyCamViewController, SwiftyCamViewControllerDelegate {
         captureButton.buttonEnabled = false
     }
     
+    
+    
 
 	func swiftyCam(_ swiftyCam: SwiftyCamViewController, didTake photo: UIImage) {
-		let newVC = PhotoViewController(image: photo)
-		self.present(newVC, animated: true, completion: nil)
+        print("photo was taken!")
+        let newVC = PhotoViewController(image: photo)
+        self.present(newVC, animated: true, completion: nil)
 	}
 
 	func swiftyCam(_ swiftyCam: SwiftyCamViewController, didBeginRecordingVideo camera: SwiftyCamViewController.CameraSelection) {
@@ -74,8 +86,8 @@ class ViewController: SwiftyCamViewController, SwiftyCamViewControllerDelegate {
 	}
 
 	func swiftyCam(_ swiftyCam: SwiftyCamViewController, didFinishProcessVideoAt url: URL) {
-		let newVC = VideoViewController(videoURL: url)
-		self.present(newVC, animated: true, completion: nil)
+//        let newVC = VideoViewController(videoURL: url)
+//        self.present(newVC, animated: true, completion: nil)
 	}
 
 	func swiftyCam(_ swiftyCam: SwiftyCamViewController, didFocusAtPoint point: CGPoint) {

@@ -54,7 +54,7 @@ open class SwiftyCamViewController: UIViewController {
         //Flash mode is set to on
         case on
         
-        //Flash mode is set to off
+        //Flash mode is set to@objc @objc  off
         case off
     }
 
@@ -185,7 +185,7 @@ open class SwiftyCamViewController: UIViewController {
     public var allowAutoRotate                = false
 
     /// Specifies the [videoGravity](https://developer.apple.com/reference/avfoundation/avcapturevideopreviewlayer/1386708-videogravity) for the preview layer.
-    public var videoGravity                   : SwiftyCamVideoGravity = .resizeAspect
+    public var videoGravity                   : SwiftyCamVideoGravity = .resize
 
     /// Sets whether or not video recordings will record audio
     /// Setting to true will prompt user for access to microphone on View Controller launch.
@@ -237,7 +237,7 @@ open class SwiftyCamViewController: UIViewController {
 
 	/// Variable for storing initial zoom scale before Pinch to Zoom begins
 
-	fileprivate var beginZoomScale               = CGFloat(1.0)
+	fileprivate var beginZoomScale               = CGFloat(0.8)
 
 	/// Returns true if the torch (flash) is currently enabled
 
@@ -852,7 +852,12 @@ open class SwiftyCamViewController: UIViewController {
 
 					// Call delegate and return new image
 					DispatchQueue.main.async {
-						self.cameraDelegate?.swiftyCam(self, didTake: image)
+                        self.cameraDelegate?.swiftyCam(self, didTake: image)
+                        self.session.stopRunning()
+                        UISelectionFeedbackGenerator().selectionChanged()
+                        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + .milliseconds(100), execute: {
+                            self.session.startRunning()
+                        })
 					}
 					completionHandler(true)
 				} else {
@@ -1058,8 +1063,8 @@ extension SwiftyCamViewController : SwiftyCamButtonDelegate {
 
 	/// Set UITapGesture to take photo
 
-	public func buttonWasTapped() {
-		takePhoto()
+	@objc public func buttonWasTapped() {
+        self.takePhoto()
 	}
 
 	/// Set UILongPressGesture start to begin video
